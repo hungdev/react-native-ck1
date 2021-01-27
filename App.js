@@ -1,30 +1,17 @@
-import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  TouchableOpacity
-} from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
-import Home from './Home'
+import React from 'react'
+import { View, Text } from 'react-native'
 
-const App = () => {
-  const [email, setEmail] = useState()
-  const [toggleCheckBox, setToggleCheckBox] = useState(false)
+import { Provider } from 'react-redux';
+import { createStore, } from 'redux';
 
+import Home from "./src/screens/Home";
 
-  const onChangeText = (value) => setEmail(value)
+let store = createStore();
+
+export default function App() {
   return (
-    <Home />
-  );
-};
-
-const styles = StyleSheet.create({
-
-});
-
-export default App;
+    <Provider store={store}>
+      <Home />
+    </Provider>
+  )
+}
