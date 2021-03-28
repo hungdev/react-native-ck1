@@ -18,13 +18,13 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'HomeStack') {
+            if (route.name === 'Home') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Wishlist') {
+            } else if (route.name === 'WishList') {
               iconName = focused ? 'heart' : 'ios-heart-outline';
             } else if (route.name === 'Cart') {
               iconName = focused ? 'cart' : 'cart-outline';
-            } else if (route.name === 'Profile') {
+            } else if (route.name === 'Me') {
               iconName = focused ? 'person' : 'person-outline';
             }
 

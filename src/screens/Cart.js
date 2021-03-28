@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 // import { Colors, Metrics } from '../themes';
 import CartView from '../components/CardView'
+import { useDispatch, useSelector } from "react-redux";
 
 const images = [
   'https://www.forever21.com/images/default_330/00421842-01.jpg',
@@ -15,6 +16,7 @@ const images = [
 const data = Array(5).fill('').map((e, i) => ({ id: i + 1, image: images[i] || images[0], name: `item ${i}`, price: '100.000', star: 4 }))
 
 export default function CartScreen() {
+  const listProducts = useSelector((store) => store.cart.listProducts);
 
   const renderItem = ({ item }) => {
     return (
@@ -44,7 +46,7 @@ export default function CartScreen() {
     <View>
       <FlatList
         style={{ backgroundColor: 'grey' }}
-        data={data}
+        data={listProducts}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       // extraData={}

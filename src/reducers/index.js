@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 import people from "./peopleReducer";
-// import cart from "./cartReducer";
+import cart from "./cartReducer";
 
 const rootReducer = combineReducers({
-  people
-  //cart
+  people,
+  cart
   // nếu có reducer khác thì add thêm ở đây
 });
 

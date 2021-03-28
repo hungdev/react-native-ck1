@@ -4,13 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import StarRating from 'react-native-star-rating';
+import { useDispatch, useSelector } from "react-redux";
 // import SortModal from '../../components/SortModal';
 // import { Colors, Metrics } from '../../themes';
 import CartView from '../components/CardView'
 import { getProduct } from "../services/Api";
+import { addCart } from '../actions/cart';
+import { getImage } from '../utils'
 
 const images = [
-  'https://www.forever21.com/images/default_330/00421842-01.jpg',
+  'https://imagena1.lacoste.com/dw/image/v2/AAUP_PRD/on/demandware.static/-/Library-Sites-LacosteContent/default/dw781d2275/SS21/PLP-Headers/PLP-Header-SS21-T-Shirt-Men-Desk.jpg?imwidth=915&impolicy=custom',
   'https://www.forever21.com/images/default_330/00410895-03.jpg',
   'https://www.forever21.com/images/default_330/00412718-02.jpg',
   'https://www.forever21.com/images/default_330/00415030-01.jpg',
@@ -18,6 +21,7 @@ const images = [
 ]
 const data = Array(10).fill('').map((e, i) => ({ id: i + 1, image: images[i] || images[0], name: `item ${i}`, price: '100.000', star: 4 }))
 export default function ProductList() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false)
   const [star, setStar] = useState(0)
@@ -40,9 +44,10 @@ export default function ProductList() {
     console.log('item', item)
     setStar(item)
   }
-  const onMoveToDetail = (item) => () => {
+  const onAddCart = (item) => () => {
     console.log('item', item)
-    navigation.navigate('Detail')
+    // dispatch({type: 'ADD_CART', data:item})
+    dispatch(addCart(item))
   }
 
 
@@ -52,8 +57,8 @@ export default function ProductList() {
         <Ionicons name="heart" size={30} color={'black'}
           style={styles.wishlistIcon}
         />
-        <TouchableOpacity onPress={onMoveToDetail(item)} activeOpacity={0.5}>
-          <Image source={{ uri: images[0] }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
+        <TouchableOpacity onPress={onAddCart(item)} activeOpacity={0.5}>
+          <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
         </TouchableOpacity>
         <View style={{ marginLeft: 5, marginVertical: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -95,7 +100,7 @@ export default function ProductList() {
         style={{ borderWidth: 1, borderColor: 'red', backgroundColor: '#E2E2E2' }}
         data={product}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item._id?.toString()}
         numColumns={2}
         horizontal={false}
       // extraData={}
