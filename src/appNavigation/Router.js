@@ -33,7 +33,7 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'HomeStack') {
               iconName = focused ? 'home' : 'home-outline';
             } else if (route.name === 'WishList') {
               iconName = focused ? 'heart' : 'ios-heart-outline';

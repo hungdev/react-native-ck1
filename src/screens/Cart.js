@@ -8,9 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getImage } from '../utils'
 
 export default function CartScreen() {
+  const dispatch = useDispatch();
   const listProducts = useSelector((store) => store.cart.listProducts);
 
+  const onChangeQuantity = (item, type) => () => {
+    // if (type === 'add') {
+    //   dispatch({ type: 'ADD_QUANTITY', data: item })
+    // } else {
+    //   dispatch({ type: 'ADD_QUANTITY', data: item })
+    // }
+    dispatch({ type: type === 'add' ? 'ADD_QUANTITY' : 'REMOVE_QUANTITY', data: item })
+  }
   const renderItem = ({ item }) => {
+    console.log('item', item)
     return (
       <CartView style={{ flex: 1, margin: 5, flexDirection: 'row' }}>
         <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: 100, height: 100, }} />
@@ -25,6 +35,15 @@ export default function CartScreen() {
               <Text style={{ textAlign: 'center', width: 50, borderWidth: 1, padding: 5, borderRadius: 5, backgroundColor: '#90ee90', borderColor: 'transparent' }}>
                 50%
               </Text>
+            </View>
+            <View style={{ alignItems: 'center', marginRight: 30 }}>
+              <TouchableOpacity onPress={onChangeQuantity(item, 'add')}>
+                <Ionicons name="add" size={30} color={'black'} />
+              </TouchableOpacity>
+              <Text style={{ fontSize: 15 }}>{item.quantity}</Text>
+              <TouchableOpacity onPress={onChangeQuantity(item, 'remove')}>
+                <Ionicons name="remove" size={30} color={'black'} />
+              </TouchableOpacity>
             </View>
             <Ionicons name="ios-trash-outline" size={30} color={'black'} />
           </View>

@@ -9,7 +9,7 @@ export default function DetailScreen({ route, navigation }) {
   const item = route.params?.data
   console.log('route', route.params?.data)
 
-  const onAddCart = () => dispatch({ type: 'ADD_CART', data: item })
+  const onAddCart = () => dispatch({ type: 'ADD_QUANTITY', data: item })
   return (
     <View>
       <TouchableOpacity>

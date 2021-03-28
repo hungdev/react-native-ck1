@@ -11,6 +11,7 @@ import CartView from '../components/CardView'
 import { getProduct } from "../services/Api";
 import { addCart } from '../actions/cart';
 import { getImage } from '../utils'
+import Spinner from '../components/Spinner'
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -19,14 +20,22 @@ export default function ProductList() {
   const [star, setStar] = useState(0)
   const [product, setProduct] = useState(0)
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  console.tron.log('zzzz', product)
+
   useEffect(() => {
     async function getData() {
+      setIsLoading(true)
       const result = await getProduct()
       setProduct(result.data.data)
       console.log('result', result)
+      setIsRefreshing(false)
+      setIsLoading(false)
     }
     getData()
-  }, [])
+  }, [isRefreshing])
 
   const toggleModal = () => {
     setIsVisible(false)
@@ -44,6 +53,9 @@ export default function ProductList() {
 
   const onMoveToDetail = (item) => () => navigation.navigate('Detail', { data: item })
 
+  const onRefresh = () => {
+    setIsRefreshing(true)
+  }
 
   const renderItem = ({ item }) => {
     return (
@@ -78,6 +90,7 @@ export default function ProductList() {
 
   return (
     <View style={{ borderWidth: 1, borderColor: 'green', flex: 1 }}>
+      {isLoading && <Spinner />}
       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, backgroundColor: 'white', paddingVertical: 10, borderBottomWidth: 0.5 }}>
         <TouchableOpacity
           onPress={() => setIsVisible(!isVisible)}
@@ -97,6 +110,9 @@ export default function ProductList() {
         keyExtractor={(item) => item._id?.toString()}
         numColumns={2}
         horizontal={false}
+        // pull to rf
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
       // extraData={}
       />
       {/* <SortModal isVisible={isVisible} toggleModal={toggleModal} /> */}
