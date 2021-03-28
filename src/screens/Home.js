@@ -12,14 +12,6 @@ import { getProduct } from "../services/Api";
 import { addCart } from '../actions/cart';
 import { getImage } from '../utils'
 
-const images = [
-  'https://imagena1.lacoste.com/dw/image/v2/AAUP_PRD/on/demandware.static/-/Library-Sites-LacosteContent/default/dw781d2275/SS21/PLP-Headers/PLP-Header-SS21-T-Shirt-Men-Desk.jpg?imwidth=915&impolicy=custom',
-  'https://www.forever21.com/images/default_330/00410895-03.jpg',
-  'https://www.forever21.com/images/default_330/00412718-02.jpg',
-  'https://www.forever21.com/images/default_330/00415030-01.jpg',
-  'https://www.forever21.com/images/default_330/00414874-01.jpg'
-]
-const data = Array(10).fill('').map((e, i) => ({ id: i + 1, image: images[i] || images[0], name: `item ${i}`, price: '100.000', star: 4 }))
 export default function ProductList() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -50,14 +42,16 @@ export default function ProductList() {
     dispatch(addCart(item))
   }
 
+  const onMoveToDetail = (item) => () => navigation.navigate('Detail', { data: item })
+
 
   const renderItem = ({ item }) => {
     return (
       <CartView style={{ flex: 1, margin: 5, }}>
-        <Ionicons name="heart" size={30} color={'black'}
-          style={styles.wishlistIcon}
-        />
-        <TouchableOpacity onPress={onAddCart(item)} activeOpacity={0.5}>
+        <TouchableOpacity onPress={onAddCart(item)}>
+          <Ionicons name="heart" size={30} color={'black'} style={styles.wishlistIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} onPress={onMoveToDetail(item)}>
           <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
         </TouchableOpacity>
         <View style={{ marginLeft: 5, marginVertical: 10 }}>

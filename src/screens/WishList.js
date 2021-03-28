@@ -46,7 +46,7 @@ export default function CartScreen() {
         style={{ backgroundColor: 'grey' }}
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item._id?.toString()}
       // extraData={}
       />
 

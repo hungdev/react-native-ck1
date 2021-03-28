@@ -6,11 +6,26 @@ import HomeScreen from '../screens/Home'
 import WishListScreen from '../screens/WishList'
 import CartScreen from '../screens/Cart'
 import MeScreen from '../screens/Me'
+import DetailScreen from '../screens/Detail'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+
+
 
 export default function App() {
+  function HomeStackScreen() {
+    return (
+      <HomeStack.Navigator
+        initialRouteName="Home">
+        <HomeStack.Screen name="Home" component={HomeScreen} />
+        <HomeStack.Screen name="Detail" component={DetailScreen} />
+      </HomeStack.Navigator>
+    )
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -37,7 +52,7 @@ export default function App() {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="HomeStack" component={HomeStackScreen} />
         <Tab.Screen name="WishList" component={WishListScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
         <Tab.Screen name="Me" component={MeScreen} />

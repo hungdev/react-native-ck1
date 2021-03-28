@@ -5,15 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 // import { Colors, Metrics } from '../themes';
 import CartView from '../components/CardView'
 import { useDispatch, useSelector } from "react-redux";
-
-const images = [
-  'https://www.forever21.com/images/default_330/00421842-01.jpg',
-  'https://www.forever21.com/images/default_330/00410895-03.jpg',
-  'https://www.forever21.com/images/default_330/00412718-02.jpg',
-  'https://www.forever21.com/images/default_330/00415030-01.jpg',
-  'https://www.forever21.com/images/default_330/00414874-01.jpg'
-]
-const data = Array(5).fill('').map((e, i) => ({ id: i + 1, image: images[i] || images[0], name: `item ${i}`, price: '100.000', star: 4 }))
+import { getImage } from '../utils'
 
 export default function CartScreen() {
   const listProducts = useSelector((store) => store.cart.listProducts);
@@ -21,7 +13,7 @@ export default function CartScreen() {
   const renderItem = ({ item }) => {
     return (
       <CartView style={{ flex: 1, margin: 5, flexDirection: 'row' }}>
-        <Image source={{ uri: item.image }} style={{ width: 100, height: 100, }} />
+        <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: 100, height: 100, }} />
         <View style={{ marginLeft: 5, marginVertical: 10, width: '100%', flex: 1, marginLeft: 10 }}>
           <Text style={{ fontSize: 17, }}>{item.name}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, width: '100%' }}>
@@ -48,7 +40,7 @@ export default function CartScreen() {
         style={{ backgroundColor: 'grey' }}
         data={listProducts}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id?.toString()}
       // extraData={}
       />
 
