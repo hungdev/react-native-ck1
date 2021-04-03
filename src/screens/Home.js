@@ -12,6 +12,7 @@ import { getProduct } from "../services/Api";
 import { addCart } from '../actions/cart';
 import { getImage } from '../utils'
 import Spinner from '../components/Spinner'
+import { getProducts } from '../reducers/productReducer'
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -23,18 +24,23 @@ export default function ProductList() {
   const [isLoading, setIsLoading] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  console.tron.log('zzzz', product)
+  const listProducts = useSelector((store) => store.product.products);
+
+
+
+  console.tron.log('zzzz', listProducts)
 
   useEffect(() => {
-    async function getData() {
-      setIsLoading(true)
-      const result = await getProduct()
-      setProduct(result.data.data)
-      console.log('result', result)
-      setIsRefreshing(false)
-      setIsLoading(false)
-    }
-    getData()
+    // async function getData() {
+    //   setIsLoading(true)
+    //   const result = await getProduct()
+    //   setProduct(result.data.data)
+    //   console.log('result', result)
+    //   setIsRefreshing(false)
+    //   setIsLoading(false)
+    // }
+    // getData()
+    dispatch(getProducts())
   }, [isRefreshing])
 
   const toggleModal = () => {
@@ -105,7 +111,7 @@ export default function ProductList() {
       </View>
       <FlatList
         style={{ borderWidth: 1, borderColor: 'red', backgroundColor: '#E2E2E2' }}
-        data={product}
+        data={listProducts}
         renderItem={renderItem}
         keyExtractor={(item) => item._id?.toString()}
         numColumns={2}
