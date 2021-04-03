@@ -13,29 +13,33 @@ import { addCart } from '../actions/cart';
 import { getImage } from '../utils'
 import Spinner from '../components/Spinner'
 
+const initPagination = { limit: 5, skip: 0 }
+
 export default function ProductList() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState(false)
   const [star, setStar] = useState(0)
-  const [product, setProduct] = useState(0)
+  const [product, setProduct] = useState([])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const [canLoadMore, setCanLoadMore] = useState(false)
+  const [pagination, setPagination] = useState(initPagination)
 
   console.tron.log('zzzz', product)
 
   useEffect(() => {
     async function getData() {
       setIsLoading(true)
-      const result = await getProduct()
-      setProduct(result.data.data)
-      console.log('result', result)
+      const result = await getProduct({ limit: pagination.limit, skip: pagination.skip })
+      setProduct(prev => [...prev, ...result.data.data])
       setIsRefreshing(false)
       setIsLoading(false)
     }
     getData()
-  }, [isRefreshing])
+  }, [isRefreshing, pagination])
 
   const toggleModal = () => {
     setIsVisible(false)
@@ -57,6 +61,13 @@ export default function ProductList() {
     setIsRefreshing(true)
   }
 
+  const handleLoadMore = () => {
+    if (canLoadMore) {
+      setPagination(prev => ({ ...prev, skip: prev.skip + 5 }))
+      setCanLoadMore(false)
+    }
+  }
+
   const renderItem = ({ item }) => {
     return (
       <CartView style={{ flex: 1, margin: 5, }}>
@@ -64,7 +75,7 @@ export default function ProductList() {
           <Ionicons name="heart" size={30} color={'black'} style={styles.wishlistIcon} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.5} onPress={onMoveToDetail(item)}>
-          <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />
+          {item?.images?.[0] && <Image source={{ uri: getImage(item?.images?.[0]) }} style={{ width: '100%', height: 250, resizeMode: 'cover' }} />}
         </TouchableOpacity>
         <View style={{ marginLeft: 5, marginVertical: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -113,7 +124,10 @@ export default function ProductList() {
         // pull to rf
         onRefresh={onRefresh}
         refreshing={isRefreshing}
-      // extraData={}
+        // load more
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={1}
+        onMomentumScrollBegin={() => setCanLoadMore(true)}
       />
       {/* <SortModal isVisible={isVisible} toggleModal={toggleModal} /> */}
     </View>

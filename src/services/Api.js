@@ -11,4 +11,4 @@ const instance = axios.create({
 
 export const login = (params) => instance.post('/login', params)
 export const onRegister = (params) => instance.post('/signup', params)
-export const getProduct = (params) => instance.get('/get-products', params)
+export const getProduct = (params) => instance.get('/get-products', { params })
